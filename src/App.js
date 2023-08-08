@@ -8,7 +8,7 @@ function App() {
 
   useEffect(() => {
     fetchRandomData().then((randomData) => {
-      setRandomUserDataJSON(randomData)
+      setRandomUserDataJSON(randomData || 'No user data found.')
     })
     
   }, [])
@@ -16,7 +16,7 @@ function App() {
     return axios.get('https://randomuser.me/api')
       .then(({data}) => {
           console.log(data)
-          return JSON.stringify(data)
+          return JSON.stringify(data, null, 2)
       })
       .catch(err => {
         console.error(err)
@@ -35,7 +35,7 @@ function App() {
       }}>
         Increase Counter
         </button>
-        <p>{randomUserDataJSON}</p>
+        <pre>{randomUserDataJSON}</pre>
     </div>
   );
 }
