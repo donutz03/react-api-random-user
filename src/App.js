@@ -1,23 +1,28 @@
 import './App.css';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import axios from "axios";
-
-// https://randomuser.me/api
-// axios.get('/user?ID=12345')
-//     .then(function (response) {
-//       //handle success
-//       console.log(response)
-//     })
-//     .catch(function (error) {
-//       // handle error
-//       console.log(error)
-//     })
-//     .then (function() {
-//       // always executed 
-//     })
 
 function App() {
   const [counter, setCounter] = useState(0);
+  const [randomUserDataJSON, setRandomUserDataJSON] = useState('')
+
+  useEffect(() => {
+    fetchRandomData().then((randomData) => {
+      setRandomUserDataJSON(randomData)
+    })
+    
+  }, [])
+  const fetchRandomData = async () => {
+    return axios.get('https://randomuser.me/api')
+      .then(({data}) => {
+          console.log(data)
+          return JSON.stringify(data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
   return (
     <div className="App">
       <h1>Hello codesandbox</h1>
@@ -30,20 +35,11 @@ function App() {
       }}>
         Increase Counter
         </button>
-        <button onClick={() => fetchRandomData()}>Fetch Random Data</button>
+        <p>{randomUserDataJSON}</p>
     </div>
   );
 }
 
-const fetchRandomData = () => {
-  return axios.get('https://randomuser.me/api')
-    .then(res => {
-        console.log(res)
-        return res
-    })
-    .catch(err => {
-      console.error(err)
-    })
-}
+
 
 export default App;
